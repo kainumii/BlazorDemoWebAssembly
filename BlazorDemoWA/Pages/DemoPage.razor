@@ -1,0 +1,14 @@
+﻿<h3>DemoPage</h3>
+
+
+
+<input type="text" @bind="@current" @oninput="@((e) => { current=(string)e.Value; })"/>
+<button onclick="@(async() => await buttonClicked.InvokeAsync(current))">Click</button>
+
+
+@code {
+    [Parameter]
+    public EventCallback<string> buttonClicked { get; set; }
+
+    private string current { get; set; } = "blazor";
+}

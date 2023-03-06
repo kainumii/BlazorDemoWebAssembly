@@ -1,0 +1,21 @@
+﻿@using BlazorDemoWA.Shared.Model;
+
+<div id="@elementId" style="height: 400px; width: 400px;"></div>
+
+@code {
+    string elementId = $"map-{Guid.NewGuid():D}";
+
+    [Parameter]
+    public double Zoom { get; set; }
+
+    [Parameter]
+    public List<Marker> Markers { get; set; }
+
+    [Inject]
+    IJSRuntime JSRuntime { get; set; }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("deliveryMap.showOrUpdate", elementId, Markers);
+    }
+}

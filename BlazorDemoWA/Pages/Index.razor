@@ -1,0 +1,26 @@
+﻿@page "/"
+
+Last multiple of three = @LastMultipleOfThree
+@str
+
+@*3. Edit the /Pages/Index.razor page so that we embed the Counter component 
+and subscribe to its Update event*@
+<Counter TestEvent="@Update"/>
+
+
+<DemoPage buttonClicked="Act"/>
+
+@code
+{
+    int LastMultipleOfThree = 0;
+    string str = "initial";
+
+    private void Update(int value)
+    {
+        LastMultipleOfThree = value;
+    }
+
+    private void Act(string value) {
+        str = value;
+    }
+}

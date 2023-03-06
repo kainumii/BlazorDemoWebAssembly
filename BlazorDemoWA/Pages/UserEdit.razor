@@ -1,0 +1,126 @@
+﻿@page "/useredit"
+@page "/useredit/{Id}"
+
+@using BlazorDemoWA.Services
+@using BlazorDemoWA.Shared.Domain
+
+
+@if (!Saved)
+{
+    @*OnValidSubmit processes assigned event handler if the form is valid when submitted by the user.*@
+    <EditForm Model="@User" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+        
+        <DataAnnotationsValidator />
+        <ValidationSummary />        
+
+        <div class="row mb-3">
+            <label>User: </label>
+            <div class="col-md-8">
+                <InputText id="name" @bind-Value="@User.Name" placeholder="Enter User: "></InputText>
+                <ValidationMessage class="offset-md-3 col-md-8" For="@(() => User.Name)" />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label>Username: </label>
+            <div class="col-md-8">
+                <InputText id="username" @bind-Value="@User.Username" placeholder="Enter User Username: "></InputText>
+                <ValidationMessage class="offset-md-3 col-md-8" For="@(() => User.Username)" />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label>Email: </label>
+            <div class="col-md-8">
+                <InputText id="email" @bind-Value="@User.Email" placeholder="Enter User Email: "></InputText>
+                <ValidationMessage class="offset-md-3 col-md-8" For="@(() => User.Email)" />
+            </div>
+        </div>
+
+        
+
+        <button type="submit" class="btn btn-primary me-1">Save user</button>
+
+    </EditForm>
+}
+else
+{
+    <div class="alert @Status">@Message</div>
+    <button type="button" class="btn btn-outline-primary" @onclick="@NavigateToOverview">Back to overview</button>
+}
+
+
+
+@code {
+
+    [Inject]
+    public IUserService? UserService { get; set; } 
+
+    [Parameter]
+    public string Id { get; set; }
+
+    public User User { get; set; } = new User();
+
+    private string Status = string.Empty;
+    private string Message = string.Empty;
+    private bool Saved;
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Saved = false;
+        int.TryParse(Id, out var userId);
+
+        if (userId == 0)
+        {
+            User = new User();
+        }
+        else
+        {
+            User = await UserService.GetUserById(userId);
+        }
+    }
+
+    private async Task HandleValidSubmit() 
+    {
+        Saved = false;
+        if (User.Id == 0)
+        {
+            // new user
+            User user = await UserService.AddUser(User);
+            
+            if (user != null)
+            {
+                Status = "alert-success";
+                Message = $"User {user.Name} added ok";
+                Saved = true;
+            }
+            else
+            {
+                Status = "alert-danger";
+                Message = "Something went wrong!!";
+                Saved = false;
+            }
+        }
+        else
+        {
+            await UserService.UpdateUser(User);
+            Status = "alert-success";
+            Message = "User updated ok";
+            Saved = true;
+        }
+    }
+
+    private async Task HandleInvalidSubmit() 
+    {
+        Status = "alert-danger";
+        Message = "Validation has some errors!";
+    }
+
+    protected void NavigateToOverview()
+    {
+        NavigationManager.NavigateTo("/useroverview");
+    }
+}

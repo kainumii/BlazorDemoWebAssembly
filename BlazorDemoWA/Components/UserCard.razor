@@ -1,0 +1,20 @@
+﻿    
+
+
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">User Card</h5>
+    <h6 class="card-subtitle mb-2 text-muted">@User.Name</h6>
+    <p class="card-text">@User.Username</p>
+    <button class="btn btn-primary"
+            @onclick="@(async () => await UserQuickViewClicked.InvokeAsync(User))">
+        Quick view
+    </button>
+    <a href="@($"userdetails/{User.Id}")" class="btn btn-success">Full details</a>
+    @*<button class="btn btn-secondary"
+    @onclick="(() => NavigateToDetails(User))">
+    Full view
+    </button>*@
+    <a id="detailNavLink" href="@($"useredit/{User.Id}")" class="btn btn-secondary btn-outline-secondary">Edit</a>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+﻿@page "/userdetails/{Id}"
+
+@using BlazorDemoWA.Shared.Domain
+@using BlazorDemoWA.Shared.Model
+
+<section>
+    <h3>
+        User Details for 
+        <small class="text-muted">@User.Name</small>
+    </h3>
+    <hr/>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-auto">
+                @User.Id
+            </div>
+            <div class="col-md-auto">
+                @User.Name
+            </div>
+            <div class="col-md-auto">
+                @User.Email
+            </div>   
+            <div class="col-md-auto">
+                @User.Username
+            </div>
+            <div class="col-md-auto">
+                @User.WebSite
+            </div>
+            <div class="col-md-auto">
+                @Distance
+            </div>
+            <div class="col-12 col-xxl-4">
+                <Map Markers="MapMarkers"></Map>
+            </div>
+        </div>
+    </div>
+
+   
+</section>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    public User User { get; set; } = new User();
+
+    [Inject]
+    public BlazorDemoWA.Services.IUserService UserService { get; set; }
+
+    public List<Marker> MapMarkers { get; set; } = new List<Marker>();
+
+    public double Distance { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        int id = int.Parse(Id);
+        User = await UserService.GetUserById(id);
+
+        if (!string.IsNullOrEmpty(User.Address?.Geo?.Lat) && !string.IsNullOrEmpty(User.Address?.Geo?.Lng))
+        {
+            //m.X = 25.472099;// double.Parse(User.Address.Geo.Lng);
+            //m.Y = 65.013785;// double.Parse(User.Address.Geo.Lat);
+
+            // Latitude is the Y axis, longitude is the X axis.
+
+            var m = new Marker();
+            m.X = double.Parse(User.Address.Geo.Lng);
+            m.Y = double.Parse(User.Address.Geo.Lat);
+            m.Description = $"{User.Name}";
+            m.ShowPopup = false;
+
+            var ouluMarker = new Marker();
+            ouluMarker.X = 25.472099;
+            ouluMarker.Y = 65.013785;
+            ouluMarker.Description = "Oulu";
+            ouluMarker.ShowPopup = false;
+
+            MapMarkers.Add(m); 
+            MapMarkers.Add(ouluMarker);
+
+            // https://github.com/scottschluer/geolocation
+            Geolocation.Coordinate origin = new Geolocation.Coordinate(25.472099, 65.013785);
+            Geolocation.Coordinate dest = new Geolocation.Coordinate(double.Parse(User.Address.Geo.Lat), double.Parse(User.Address.Geo.Lng));
+
+            double distance = Geolocation.GeoCalculator.GetDistance(origin, dest, 1, Geolocation.DistanceUnit.Kilometers);
+            Distance = distance;
+        }
+    }
+}

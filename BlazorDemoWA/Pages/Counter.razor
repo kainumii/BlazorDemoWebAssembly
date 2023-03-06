@@ -1,0 +1,31 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    // 1. Add a new callback parameter.
+    // This declares a new EventCallback named TestEvent that 
+    // any consuming component can register an interest in.
+    [Parameter]
+    public EventCallback<int> TestEvent { get; set; }
+
+    private int currentCount = 0;
+
+    private async void IncrementCount()
+    {
+        currentCount++;
+
+        // 2. Edit the IncrementCount method we can emit this event whenever 
+        // the counter is incremented to a multiple of 3.
+        if (currentCount % 3 == 0)
+        {
+            await TestEvent.InvokeAsync(currentCount);
+        }
+    }
+}

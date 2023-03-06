@@ -1,0 +1,20 @@
+﻿@page "/useroverview"
+
+<h1>Overview Page</h1>
+
+@if (Users == null)
+{
+    <p>Loading Overview Page ..</p>
+}
+else
+{
+    <QuickView User="_selectedUser"></QuickView>
+    <div class="row">
+        @foreach(var user in Users)
+        {
+            <div class="col">
+                <UserCard User="user" UserQuickViewClicked="ShowQuickView"/>
+            </div>
+         }
+     </div>
+}

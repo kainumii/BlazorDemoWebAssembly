@@ -1,0 +1,21 @@
+﻿
+@code {
+    private BlazorDemoWA.Shared.Domain.User _user;
+    public UserCardTests()
+    {
+        _user  = new BlazorDemoWA.Shared.Domain.User();
+        _user.Id = 100;
+        _user.Name = "Aku Ankka";
+        _user.WebSite = "www.akuankka.com";
+    }
+
+    [Fact]
+    public void RenderUserCardDetailsLink()
+    {
+        using var ctx = new TestContext();
+
+        var cut = ctx.Render(@<UserCard User="_user" />);
+
+        cut.Find("#detailNavLink").MarkupMatches(@"<a href=""useredit/100"" id=""detailNavLink"" class=""btn btn-secondary btn-outline-secondary"">Edit</a>");
+    }
+}
