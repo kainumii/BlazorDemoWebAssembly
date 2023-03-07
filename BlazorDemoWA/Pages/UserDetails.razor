@@ -10,31 +10,32 @@
     </h3>
     <hr/>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-auto">
-                @User.Id
-            </div>
-            <div class="col-md-auto">
-                @User.Name
-            </div>
-            <div class="col-md-auto">
-                @User.Email
-            </div>   
-            <div class="col-md-auto">
-                @User.Username
-            </div>
-            <div class="col-md-auto">
-                @User.WebSite
-            </div>
-            <div class="col-md-auto">
-                @Distance
-            </div>
-            <div class="col-12 col-xxl-4">
-                <Map Markers="MapMarkers"></Map>
-            </div>
-        </div>
-    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Usename</th>
+                <th>Website</th>
+                <th>Distance</th>
+                <th>Map</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@User.Id</td>
+                <td>@User.Name</td>
+                <td>@User.Email</td>
+                <td>@User.Username</td>
+                <td>@User.WebSite</td>
+                <td>@Distance</td>
+                <td>
+                    <Map Markers="MapMarkers"></Map>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
    
 </section>

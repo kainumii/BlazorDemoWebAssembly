@@ -10,11 +10,11 @@
             @onclick="@(async () => await UserQuickViewClicked.InvokeAsync(User))">
         Quick view
     </button>
-    <a href="@($"userdetails/{User.Id}")" class="btn btn-success">Full details</a>
+    <a href="@($"userdetails/{User.Id}")" class="btn btn-info">Full details</a>
     @*<button class="btn btn-secondary"
     @onclick="(() => NavigateToDetails(User))">
     Full view
     </button>*@
-    <a id="detailNavLink" href="@($"useredit/{User.Id}")" class="btn btn-secondary btn-outline-secondary">Edit</a>
+    <a id="detailNavLink" href="@($"useredit/{User.Id}")" class="btn btn-success">Edit</a>
   </div>
 </div>
